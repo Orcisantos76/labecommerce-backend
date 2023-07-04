@@ -75,7 +75,67 @@ app.post("/products", (req: Request, res: Response)=>{
         imageUrl: imageUrl
     }
     products.push(newProduct)
+    //res da o status . send é a descriçao do que foi feito
     res.status(201).send("Produto cadastrado com sucesso")
+})
+
+app.put("/products/:id", (req: Request, res: Response)=>{
+  const idToEdit = req.params.id
+
+  const newId = req.body.id as string | undefined
+  const newName = req.body.name as string | undefined
+  const newPrice = req.body.price as number | undefined
+  const newDescription = req.body.description as string | undefined
+  const newImageUrl = req.body.imageUrl as string | undefined
+
+  const prod = products.find((prod)=> prod.id === idToEdit)
+
+  if (prod){
+    prod.id = newId || prod.id;
+    prod.name = newName || prod.name;
+    prod.description = newDescription || prod.description;
+    prod.imageUrl = newImageUrl  || prod.imageUrl;
+
+    prod.price = isNaN(Number(newPrice))? prod.price : newPrice as number;
+  }
+  res.status(200).send("Atualização realizada com sucesso")
+})
+
+app.put("/users/:id",(req: Request, res:Response)=>{
+  const idToAlter = req.params.id
+
+  const newId = req.body.id as string | undefined
+  const newName = req.body.name as string | undefined
+  const newEmail = req.body.email as string | undefined
+  const newPassword = req.body.password as string | undefined
+
+  const user = users.find((user)=>user.id === idToAlter)
+  if (user){
+    user.id = newId || user.id;
+    user.name = newName || user.name;
+    user.email = newEmail || user.email;
+    user.password = newPassword || user.password
+  }
+
+  res.status(200).send("Alteração realizada com sucesso")
+})
+
+app.delete('/users/:id', (req: Request, res: Response)=>{
+  const idToDelete = req.params.id
+  const userIndex = users.findIndex((user) => user.id === idToDelete)
+  if (userIndex >= 0){
+    users.splice(userIndex, 1)
+  }
+  res.status(200).send("Usuario excluido.")
+})
+
+app.delete('/products/:id', (req: Request, res: Response)=>{
+  const idToRemove = req.params.id
+  const productIndex = products.findIndex((prod) => prod.id === idToRemove)
+  if (productIndex >=0){
+    products.splice(productIndex, 1)
+  }
+  res.status(200).send('Produto excluido.')
 })
 // criar novo usuario
 createTUser("u003", "Arthur", "arthur@email.com", "arthur1234");
@@ -90,9 +150,8 @@ createProduct(
   "https://example.com/ssd-gamer.jpg"
 );
 //buscar produtos
-const allProducts = getAllProducts();
-
-const searchResults = searchProductByName("gamer");
-console.log("resultado da busca", searchResults);
+// const allProducts = getAllProducts();
+// const searchResults = searchProductByName("gamer");
+// console.log("resultado da busca", searchResults);
 console.table(products);
 console.table(users);
