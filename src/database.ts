@@ -1,5 +1,6 @@
 import { TUsers, TProduct } from "./types";
 
+
 //array de users
 export const users: TUsers[] = [
   {
