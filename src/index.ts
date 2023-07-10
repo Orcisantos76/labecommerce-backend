@@ -174,7 +174,8 @@ app.put("/products/:id", (req: Request, res: Response) => {
     const already = products.find((p) => p.id === idToEdit);
 
     if (!already) {
-      res.status(404).send("Produto não encontrado");
+      res.status(404)
+      throw new Error("Produto não encontrado"); // Lança um erro para interromper a execução
     } else {
       const newId = req.body.id as string | undefined;
       const newName = req.body.name as string | undefined;
@@ -197,8 +198,12 @@ app.put("/products/:id", (req: Request, res: Response) => {
       res.status(200).send("Atualização realizada com sucesso");
     }
   } catch (error: any) {
-    res.status(500).send("Ocorreu um erro na edição do produto");
-  }
+    console.log(error)
+       if(res.statusCode === 200){
+               res.status(500)
+           }
+           res.send(error.message)
+ }
 });
 
 app.put("/users/:id", (req: Request, res: Response) => {
@@ -222,9 +227,13 @@ app.put("/users/:id", (req: Request, res: Response) => {
       }
       res.status(200).send("Alteração realizada com sucesso");
     }
-  } catch (error: any) {
-    res.status(500).send("Ocorreu um erro na edição do produto");
-  }
+  }catch (error: any) {
+    console.log(error)
+       if(res.statusCode === 200){
+               res.status(500)
+           }
+           res.send(error.message)
+ }
 });
 
 app.delete("/users/:id", (req: Request, res: Response) => {
