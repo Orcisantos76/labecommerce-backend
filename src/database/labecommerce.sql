@@ -18,8 +18,8 @@ CREATE TABLE products (
 INSERT INTO users (id, name, email, password, create_at)
 VALUES
     ('u001','Orci','orci@email.com','orci1234',datetime('now')),
-    ('u002','Ana','ana@email.com','orci1234',datetime('now')),
-    ('u003','Arthur','arthur@email.com','orci1234',datetime('now'));
+    ('u002','Ana','ana@email.com','ana1234',datetime('now')),
+    ('u003','Arthur','arthur@email.com','arthur1234',datetime('now'));
 
 INSERT INTO products (id, name,price, description, image_url)
 VALUES
@@ -30,10 +30,57 @@ VALUES
 PRAGMA table_info ('users');
 PRAGMA table_info ('products');
 
+--busca tabela de users:
 SELECT * FROM users;
+
+--busca a tabela de products: 
+SELECT * FROM products;
+
+--busca por name que contenha a palavra gamer
+SELECT * FROM products
+WHERE name LIKE '%gamer%';
+
+--Criar um novo usuario.id
+INSERT INTO users (id, name, email, password, create_at)
+VALUES
+    ('insira o id','insira o name', 'insira o email', 'insira o password', 'datatime(now)');
+
+--Criar um novo produto
+INSERT INTO products (id, name,price, description, image_url)
+VALUES
+    ('prod006', 'Teclado mecanico2', 450.00 , 'tempo de resposta 1ms', 'https://picsum.photos/seed/teclado/400'  );
+
+
+--Deletar um produto pelo id
+DELETE FROM products
+WHERE id = 'prod006';
+
+--Deletar user pelo id
+DELETE FROM users
+WHERE id = 'insira o id';
+
+--Editar update pelo id, ira alterar a set = descriçao 
+UPDATE products
+SET description = 'Melhor da categoria'
+WHERE id = 'prod003';
+
+--Editar update pelo id, ira alterar o set do usuario
+UPDATE users
+SET email = 'orcisantos@email.com'
+WHERE id ='u001'
+
+--
+UPDATE products
+SET price = 500;
 
 select 
     id,
     name,
     price
 FROM products;
+
+UPDATE products
+SET name = 'new name',
+    price = 500,
+    description = 'new description'
+WHERE id = 'prod006';
