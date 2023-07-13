@@ -20,9 +20,21 @@ CREATE TABLE purchases(
     buyer TEXT NOT NULL,
     total_price REAL NOT NULL,
     created_at TEXT NOT NULL,
-
-    Foreign Key (buyer) REFERENCES users(id)
+    Foreign Key (buyer) REFERENCES users(id)        
 );
+
+CREATE TABLE purchases_products(
+    purchase_id TEXT NOT NULL,
+    product_id TEXT NOT NULL,
+    quantity INTEGER NOT NULL,
+    Foreign Key (purchase_id) REFERENCES purchases(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    Foreign Key (product_id) REFERENCES products(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+DROP TABLE purchases_products;
 
 INSERT INTO users (id, name, email, password, create_at)
 VALUES
@@ -43,10 +55,22 @@ VALUES
     ('p003','u002',350,datetime('now')),
     ('p004','u002',500,datetime('now'));
 
+INSERT INTO purchases_products (purchase_id, product_id, quantity)
+VALUES
+    ('p004','prod003',2),
+    ('p003','prod003',3),
+    ('p004','prod003',2);
+
 --atualizar valor.
 UPDATE purchases
 SET total_price = 999
 WHERE id = 'p004';
+
+SELECT * FROM purchases_products
+INNER JOIN purchases
+ON purchases_products.purchase_id = purchases.id
+INNER join products
+on products.id = purchases_products.product_id;
 
 
 --Informaçao da tabela
@@ -66,6 +90,8 @@ SELECT * FROM users;
 SELECT * FROM products;
 
 SELECT * FROM purchases;
+
+SELECT * FROM purchases_products;
 
 SELECT
     purchases.id AS idPurchase,
@@ -99,6 +125,7 @@ VALUES
 INSERT INTO products (id, name,price, description, image_url)
 VALUES
     ('prod006', 'Teclado mecanico2', 450.00 , 'tempo de resposta 1ms', 'https://picsum.photos/seed/teclado/400'  );
+
 
 
 --Deletar um produto pelo id
