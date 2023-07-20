@@ -5,7 +5,7 @@ export type TUsers = {
     name: string;
     email: string;
     password: string;
-    createdAt: string;//data
+    
 };
 export type TProduct ={
     id: string;
@@ -13,4 +13,13 @@ export type TProduct ={
     price: number;
     description: string;
     imageUrl: string;
-}
+};
+export type TPurchase = {
+    id: string;
+    buyer: string;
+    totalPrice: number;
+    products: Array<{
+      product: TProduct;
+      quantity: number;
+    }>;
+  };

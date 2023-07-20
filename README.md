@@ -1,47 +1,35 @@
 # labecommerce-backend
 link de publicaçao no postman
 
-
 https://documenter.getpostman.com/view/27659216/2s93zFWJnQ
 
-Primeira etapa do projeto
-
-criar o package.json
-personalizar as configurações
-criar scripts
 
 
-Muita novidade no aprendizado do backend
+A API "labecommerce-backend" é uma aplicação destinada ao registro, atualização e exclusão de usuários, produtos e compras. Ela foi desenvolvida para gerenciar todo o ciclo de vendas de uma loja online, desde o cadastro de usuários até a finalização de compras.
 
-Segunda etapa branch typescript-i
+As principais características da API incluem:
 
-foi criado e configurado o tsconfig.json
-criei a pasta src 
-comecei a trabalhar com index.ts dentro da pasta criada src
-aprendendo a usar tipagens
+Banco de dados: A aplicação utiliza um banco de dados real, com tecnologia SQL e SQLite, para armazenar com segurança as informações dos usuários, produtos e compras.
 
-terceiro dia branch typescript-ii
+Tecnologias utilizadas: A API foi construída utilizando NodeJS e Typescript. Além disso, ela faz uso do framework Express para a criação das rotas e manipulação das requisições. A interação com o banco de dados é realizada através do Knex.
 
-pratica de manipulacao de arrays e objetos
-desenvolvi a funcao createUser para implementala no arquivo src/database.ts e exporta-la
-criada funcao para adicionar um produto com 5 parametros ( id, name, price, description e imageUrl)
+Endpoints: A API disponibiliza diversos endpoints para operações relacionadas aos usuários, produtos e compras. Alguns dos principais endpoints são:
 
+Users: Permite cadastrar novos usuários, obter todos os usuários cadastrados, editar informações de um usuário existente e deletar um usuário.
 
-quarta pratica brancha apis-e-express
+Products: Permite cadastrar novos produtos, obter todos os produtos cadastrados, buscar produtos por nome, editar informações de um produto existente e deletar um produto.
 
-criando endpoint get all users, get all products, testando no postman o servidor 
-recebendo status e fazendo a aplicacao
-refatorei para o parametro ou undefined
-busca por query com resposta sendo um lista filtrada
+Purchases: Permite cadastrar novas compras, obter todas as compras realizadas, buscar uma compra específica por ID, obter as compras de um usuário específico e editar ou deletar uma compra existente.
 
-quinta etapa validacao de dados statusCode com Error
-Documentei a api no postman 
-Aprendi o que é strict mas nao apliquei por insegurança
+Documentação: A API possui uma documentação disponível no formato Postman, que contém detalhes sobre cada endpoint, seus parâmetros e respostas esperadas.
+Para instalar a API "labecommerce-backend", você precisa seguir os seguintes passos:
 
-Nesta etapa estamos implantando o bd, utilizando o SQLite.
-Foram criados duas tabela e populadas com o conteudo do database.ts.
-tambem foi instalado a extençao do MySql, para doper criar a base de dados, após
-foi criada uma pasta dentro de src com dois aquivos um labecommerce.bd e labecommerce.sql que é o que receberá o codigo em si.
+Verificar se o Node.js e o gerenciador de pacotes NPM estão instalados em seu sistema.
 
+Baixar ou clonar o repositório do projeto em sua máquina.
 
+Abrir o terminal no diretório do projeto e executar o comando npm install para instalar as dependências necessárias.
 
+Em seguida, executar o comando npm run start para iniciar o servidor localmente ou npm run dev para iniciar o servidor em modo de desenvolvimento.
+
+Após a instalação, você pode acessar a API utilizando o endpoint http://localhost:3000/. Para informações mais detalhadas sobre como utilizar os endpoints, consulte a documentação da API "labecommerce-backend" disponibilizada no Postman.

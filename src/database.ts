@@ -8,14 +8,14 @@ export const users: TUsers[] = [
     name: "Orci",
     email: "orci@email.com",
     password: "orci1234",
-    createdAt: new Date().toISOString(),
+   
   },
   {
     id: "u002",
     name: "Ana",
     email: "ana@email.com",
     password: "ana1234",
-    createdAt: new Date().toISOString(),
+   
   },
 ];
 //array product
@@ -51,7 +51,7 @@ export function createTUser(
         name,
         email,
         password,
-        createdAt,
+        
     };
     //para adicionar ao array existente
     users.push(newTUser);
