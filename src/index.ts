@@ -1,14 +1,5 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
-import {
-  users,
-  products,
-  createProduct,
-  createTUser,
-  getAllProducts,
-  getAllUsers,
-  searchProductByName,
-} from "./database";
 import { TProduct, TPurchase, TUsers } from "./types";
 import { db } from "./database/knex";
 
@@ -67,6 +58,7 @@ app.get("/users/search", async (req: Request, res: Response) => {
     const result = await db("users")
     .select()
     .where("name", "LIKE",`%${name}%`)
+    .orderBy('id',"asc")
 
     res.status(200).send(result);    
   } catch (error) {
@@ -115,12 +107,14 @@ app.get("/products/search", async (req: Request, res: Response) => {
       }
     }
     const result = await db('products')
+    .orderBy('id',"asc")
 
     if (name) {
       const resultFiltered = result.filter((product) => product.name.toLocaleLowerCase().includes(name.toLocaleLowerCase()))
       res.status(200).send(resultFiltered)
       return
     }
+    
     res.status(200).send(result)
 
   }  catch (error) {
@@ -440,6 +434,7 @@ app.get("/purchases/:id", async (req: Request, res: Response) => {
       .from("purchases")
       .innerJoin("users", "purchases.buyer", "=", "users.id")
       .where("purchases.id", "=", idTosearch);
+      
 
     const products = await db
       .select("*")
@@ -484,7 +479,7 @@ app.delete("/purchases/:id", async (req: Request, res: Response) => {
 
     if (id.length < 4 || !id.startsWith("p")) {
       if (id.length < 4) {
-        throw new Error("O ID deve ter no minimo 4 caracteres e começar com a sigla 'purc'")
+        throw new Error("O ID deve ter no minimo 4 caracteres e começar com a sigla 'p'")
       }
       throw new Error("O ID deve começar com a sigla 'p'")
     }
@@ -539,9 +534,9 @@ app.put("/products/:id", async (req: Request, res: Response) => {
             res.status(400);
             throw new Error("Nome precisa ser uma string!");
           }
-          if (newId.length < 7) {
+          if (newId.length < 4) {
             res.status(400);
-            throw new Error("'id' deve possuir pelo menos 7 caracteres");
+            throw new Error("'id' deve possuir pelo menos 4 caracteres");
           }
           if (!newId.startsWith("prod")) {
             res.status(400);
@@ -610,165 +605,4 @@ app.put("/products/:id", async (req: Request, res: Response) => {
     }
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-app.put("/products/:id", (req: Request, res: Response) => {
-  try {
-    const idToEdit = req.params.id;
-    const already = products.find((p) => p.id === idToEdit);
-
-    if (!already) {
-      res.status(404)
-      throw new Error("Produto não encontrado"); // Lança um erro para interromper a execução
-    } else {
-      const newId = req.body.id as string | undefined;
-      const newName = req.body.name as string | undefined;
-      const newPrice = req.body.price as number | undefined;
-      const newDescription = req.body.description as string | undefined;
-      const newImageUrl = req.body.imageUrl as string | undefined;
-
-      const prod = products.find((prod) => prod.id === idToEdit);
-
-      if (prod) {
-        prod.id = newId || prod.id;
-        prod.name = newName || prod.name;
-        prod.description = newDescription || prod.description;
-        prod.imageUrl = newImageUrl || prod.imageUrl;
-
-        prod.price = isNaN(Number(newPrice))
-          ? prod.price
-          : (newPrice as number);
-      }
-      res.status(200).send("Atualização realizada com sucesso");
-    }
-  }catch (error) {
-    console.log(error);
-    if (res.statusCode === 200) {
-      res.status(500);
-    }
-    if (error instanceof Error) {
-      res.send(error.message);
-    } else {
-      res.send("Erro inesperado!");
-    }
-  }
-});
-
-app.put("/users/:id", (req: Request, res: Response) => {
-  try {
-    const idToAlter = req.params.id;
-    const already = users.filter((user) => user.id === idToAlter);
-    if (already.length === 0) {
-      res.status(404).send("Usuário não encontrado");
-    } else {
-      const newId = req.body.id as string | undefined;
-      const newName = req.body.name as string | undefined;
-      const newEmail = req.body.email as string | undefined;
-      const newPassword = req.body.password as string | undefined;
-
-      const user = users.find((user) => user.id === idToAlter);
-      if (user) {
-        user.id = newId || user.id;
-        user.name = newName || user.name;
-        user.email = newEmail || user.email;
-        user.password = newPassword || user.password;
-      }
-      res.status(200).send("Alteração realizada com sucesso");
-    }
-  }catch (error) {
-    console.log(error);
-    if (res.statusCode === 200) {
-      res.status(500);
-    }
-    if (error instanceof Error) {
-      res.send(error.message);
-    } else {
-      res.send("Erro inesperado!");
-    }
-  }
-});
-
-
-createTUser("u003", "Arthur", "arthur@email.com", "arthur1234");
-createProduct(
-  "prod003",
-  "SSD Gamer",
-  349.99,
-  "Acelere seu sistema com velocidades incríveis de leitura e gravação.",
-  "https://example.com/ssd-gamer.jpg"
-);
-app.delete("/users/:id", async (req: Request, res: Response) => {
-  try {
-    const id = req.params.id as string
-
-    const [exist] = await db('users').where({ id });
-
-    if (!exist) {
-      res.status(400)
-      throw new Error("Esse usuario não existe");
-    }
-
-    await db.delete().from('users').where({ id });
-
-    res.status(200).send("Usuario apagado com sucesso");
-  }catch (error) {
-    console.log(error);
-    if (res.statusCode === 200) {
-      res.status(500);
-    }
-    if (error instanceof Error) {
-      res.send(error.message);
-    } else {
-      res.send("Erro inesperado!");
-    }
-  }
-});
-
-app.delete("/products/:id", async (req: Request, res: Response) => {
-  try {
-    const id = req.params.id
-    const [exist] = await db('products').where({ id })
-    console.log(exist,id)
-    if (!exist) {
-      res.status(400)
-      throw new Error("Esse produto não existe")
-    }
-    await db.delete().from('products').where({ id })
-    res.status(200).send("Produto apagado com sucesso")
-  } catch (error) {
-    console.log(error);
-    if (res.statusCode === 200) {
-      res.status(500);
-    }
-    if (error instanceof Error) {
-      res.send(error.message);
-    } else {
-      res.send("Erro inesperado!");
-    }
-  }
-})
 
